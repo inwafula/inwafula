@@ -1,0 +1,141 @@
+openapi: 3.0.1
+info:
+  title: 'Microsoft Graph API for Application and Service Principal Information'
+  description: 'Fetch Azure Entra ID (formerly Azure AD) application registration details, service principals, and permissions using Microsoft Graph API.'
+  version: '1.0.0'
+  contact:
+    url: 'https://learn.microsoft.com/en-us/copilot/security/custom-plugins'
+servers:
+  - url: 'https://graph.microsoft.com/v1.0'
+paths:
+  /applications/{applicationId}:
+    get:
+      summary: 'Get details of an Azure Entra ID application registration by Application ID'
+      description: 'Retrieve details of an Azure Entra ID application registration using its Application (client) ID.'
+      operationId: 'getApplicationDetails'
+      parameters:
+        - name: 'applicationId'
+          in: path
+          required: true
+          description: 'The application (client) ID of the application registration to retrieve.'
+          schema:
+            type: 'string'
+      responses:
+        '200':
+          description: 'Successful response with application details.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '404':
+          description: 'Application not found.'
+        '401':
+          description: 'Unauthorized or invalid credentials.'
+  
+  /servicePrincipals:
+    get:
+      summary: 'Get details of service principals associated with an application'
+      description: 'Retrieve the service principals related to the provided Application (client) ID and their permissions.'
+      operationId: 'getServicePrincipalDetails'
+      parameters:
+        - name: 'appId'
+          in: query
+          required: true
+          description: 'The application (client) ID used to retrieve associated service principals.'
+          schema:
+            type: 'string'
+      responses:
+        '200':
+          description: 'Successful response with service principal and permissions details.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicePrincipalDetails'
+        '404':
+          description: 'No service principals found for the given application.'
+        '401':
+          description: 'Unauthorized or invalid credentials.'
+
+components:
+  schemas:
+    Application:
+      type: 'object'
+      properties:
+        id:
+          type: 'string'
+          description: 'The unique identifier of the application.'
+        appId:
+          type: 'string'
+          description: 'The client ID of the application.'
+        displayName:
+          type: 'string'
+          description: 'The display name of the application.'
+        signInAudience:
+          type: 'string'
+          description: 'The intended audience for the application.'
+        web:
+          type: 'object'
+          properties:
+            redirectUris:
+              type: 'array'
+              items:
+                type: 'string'
+              description: 'List of redirect URIs configured for the application.'
+        api:
+          type: 'object'
+          properties:
+            oauth2PermissionScopes:
+              type: 'array'
+              items:
+                type: 'object'
+                properties:
+                  id:
+                    type: 'string'
+                    description: 'Permission scope ID.'
+                  adminConsentDisplayName:
+                    type: 'string'
+                    description: 'Display name for admin consent.'
+                  isEnabled:
+                    type: 'boolean'
+                    description: 'Whether the permission is enabled.'
+    
+    ServicePrincipalDetails:
+      type: 'object'
+      properties:
+        id:
+          type: 'string'
+          description: 'The unique identifier of the service principal.'
+        appId:
+          type: 'string'
+          description: 'The application (client) ID associated with the service principal.'
+        displayName:
+          type: 'string'
+          description: 'The display name of the service principal.'
+        appRoles:
+          type: 'array'
+          items:
+            type: 'object'
+            properties:
+              id:
+                type: 'string'
+                description: 'App role ID.'
+              displayName:
+                type: 'string'
+                description: 'App role display name.'
+              isEnabled:
+                type: 'boolean'
+                description: 'Whether the app role is enabled.'
+        oauth2PermissionGrants:
+          type: 'array'
+          items:
+            type: 'object'
+            properties:
+              consentType:
+                type: 'string'
+                description: 'The type of consent (e.g., delegated, application).'
+              scope:
+                type: 'string'
+                description: 'The permissions scope granted to the service principal.'
+              principalId:
+                type: 'string'
+                description: 'The unique identifier of the principal who consented to the permission.'
