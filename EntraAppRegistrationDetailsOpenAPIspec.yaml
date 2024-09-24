@@ -1,0 +1,76 @@
+openapi: 3.0.1
+info:
+  title: 'Microsoft Graph API for Application Registrations'
+  description: 'Fetch details of an Azure Entra ID (formerly Azure AD) application registration using Microsoft Graph API.'
+  version: '1.0.0'
+  contact:
+    name: 'Feedback'
+    url: 'https://learn.microsoft.com/en-us/copilot/security/custom-plugins'
+servers:
+  - url: 'https://graph.microsoft.com/v1.0'
+paths:
+  /applications/{applicationId}:
+    get:
+      summary: 'Get details of an application registration by Application ID'
+      description: 'Retrieve details of an Azure Entra ID application registration using its Application ID.'
+      operationId: 'getApplicationDetails'
+      parameters:
+        - name: 'applicationId'
+          in: path
+          required: true
+          description: 'The application (client) ID of the application registration to retrieve.'
+          schema:
+            type: 'string'
+      responses:
+        '200':
+          description: 'Successful response, application details returned.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '404':
+          description: 'Application not found.'
+        '401':
+          description: 'Unauthorized or invalid credentials.'
+components:
+  schemas:
+    Application:
+      type: 'object'
+      properties:
+        id:
+          type: 'string'
+          description: 'The unique identifier of the application.'
+        appId:
+          type: 'string'
+          description: 'The client ID of the application.'
+        displayName:
+          type: 'string'
+          description: 'The display name of the application.'
+        signInAudience:
+          type: 'string'
+          description: 'The intended audience for the application.'
+        web:
+          type: 'object'
+          properties:
+            redirectUris:
+              type: 'array'
+              items:
+                type: 'string'
+              description: 'List of redirect URIs configured for the application.'
+        api:
+          type: 'object'
+          properties:
+            oauth2PermissionScopes:
+              type: 'array'
+              items:
+                type: 'object'
+                properties:
+                  id:
+                    type: 'string'
+                    description: 'Permission scope ID.'
+                  adminConsentDisplayName:
+                    type: 'string'
+                    description: 'Display name for admin consent.'
+                  isEnabled:
+                    type: 'boolean'
+                    description: 'Whether the permission is enabled.'
