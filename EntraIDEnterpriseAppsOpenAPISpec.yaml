@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+  title: Graph API Plugin to Access Enterprise Applications
+  description: Retrieve all Enterprise Applications registered in the tenant using the Microsoft Graph API.
+  version: "1.0"
+servers:
+  - url: https://graph.microsoft.com/v1.0
+paths:
+  /servicePrincipals:
+    get:
+      operationId: ListEnterpriseApplications
+      summary: List all Enterprise Applications in the tenant.
+      responses:
+        200:
+          description: Successful retrieval of Enterprise Applications.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The unique identifier of the Enterprise Application.
+                        displayName:
+                          type: string
+                          description: The display name of the Enterprise Application.
+                        appId:
+                          type: string
+                          description: The Application ID of the Enterprise Application.
+                        appRoles:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                description: The unique identifier of the app role.
+                              displayName:
+                                type: string
+                                description: The display name of the app role.
+                              isEnabled:
+                                type: boolean
+                                description: Indicates whether the app role is enabled.
+                        tags:
+                          type: array
+                          items:
+                            type: string
+                            description: Tags associated with the Enterprise Application.
+        401:
+          description: Unsuccessful authentication.
+        403:
+          description: Insufficient permissions to retrieve Enterprise Applications.
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
