@@ -1,0 +1,109 @@
+openapi: 3.0.1
+info:
+  title: Entra ID User Roles retrieval
+  description: Retrieve Entra ID roles associated with a specific user and their assigned roles using the Microsoft Graph API.
+  version: 1.0.0
+servers:
+  - url: https://graph.microsoft.com/v1.0
+paths:
+  /users/{upn}/roles:
+    get:
+      summary: Get all roles associated with a user
+      description: Retrieves all Entra ID roles associated with a user identified by their User Principal Name (UPN).
+      parameters:
+        - name: upn
+          in: path
+          required: true
+          description: The UPN (User Principal Name) of the user to retrieve roles for.
+          schema:
+            type: string
+            example: harry.burns@contoso.com
+      responses:
+        '200':
+          description: List of roles associated with the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userPrincipalName:
+                    type: string
+                    description: The UPN of the user.
+                  associatedRoles:
+                    type: array
+                    description: List of Entra ID roles associated with the user.
+                    items:
+                      type: object
+                      properties:
+                        roleId:
+                          type: string
+                          description: The ID of the role.
+                        roleName:
+                          type: string
+                          description: The name of the role.
+                        isPrivileged:
+                          type: boolean
+                          description: Indicates if the role is privileged.
+        '400':
+          description: Invalid input provided.
+        '401':
+          description: Unauthorized. Token is invalid or missing.
+        '500':
+          description: Internal server error.
+
+  /users/{upn}/assignedRoles:
+    get:
+      summary: Get all assigned roles for a user
+      description: Retrieves all Entra ID roles explicitly assigned to a user identified by their UPN.
+      parameters:
+        - name: upn
+          in: path
+          required: true
+          description: The UPN (User Principal Name) of the user to retrieve assigned roles for.
+          schema:
+            type: string
+            example: harry.burns@contoso.com
+      responses:
+        '200':
+          description: List of assigned roles for the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userPrincipalName:
+                    type: string
+                    description: The UPN of the user.
+                  assignedRoles:
+                    type: array
+                    description: List of Entra ID roles explicitly assigned to the user.
+                    items:
+                      type: object
+                      properties:
+                        assignmentId:
+                          type: string
+                          description: The unique ID of the role assignment.
+                        roleId:
+                          type: string
+                          description: The ID of the assigned role.
+                        roleName:
+                          type: string
+                          description: The name of the assigned role.
+                        assignedBy:
+                          type: string
+                          description: The user or system that assigned the role.
+        '400':
+          description: Invalid input provided.
+        '401':
+          description: Unauthorized. Token is invalid or missing.
+        '500':
+          description: Internal server error.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Requires an OAuth2 Bearer token for authentication with Microsoft Graph API.
+security:
+  - bearerAuth: []
