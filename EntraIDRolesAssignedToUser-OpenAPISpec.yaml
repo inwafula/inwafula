@@ -8,6 +8,7 @@ x-metadata:
   displayName: Retrieve list of Entra ID roles assigned to a given user
   samplePrompts:
     - "List all Entra ID roles assigned to harryb@MngEnvMCAP948099.onmicrosoft.com."
+    - "List all Entra ID roles assigned to Harry Burns"
     - "What roles does harryb@MngEnvMCAP948099.onmicrosoft.com have in Entra ID?"
     - "Retrieve all Entra ID roles for the user with the email harryb@MngEnvMCAP948099.onmicrosoft.com."
     - "Show the roles assigned to harryb@MngEnvMCAP948099.onmicrosoft.com in Entra ID."
