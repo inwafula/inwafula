@@ -1,10 +1,8 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: ListAssignedEntraIDRoles
-  description: 
-    Use this skill to retrieve a list of roles assigned to a user in Entra ID.
-    For example, use this to find out which administrative or custom roles a specific user has within your organization.
-  version: 1.0.0
+  title: Graph API Plugin to Access Entra ID roles for a given user
+  description: Use this skill to retrieve a list of roles assigned to a user in Entra ID. For example, use this to find out which administrative or custom roles a specific user has within your organization.
+  version: "1.0"
 x-metadata:
   name: ListAssignedEntraIDRoles
   displayName: Retrieve list of Entra ID roles assigned to a given user
@@ -13,11 +11,9 @@ x-metadata:
     - "What roles does harryb@MngEnvMCAP948099.onmicrosoft.com have in Entra ID?"
     - "Retrieve all Entra ID roles for the user with the email harryb@MngEnvMCAP948099.onmicrosoft.com."
     - "Show the roles assigned to harryb@MngEnvMCAP948099.onmicrosoft.com in Entra ID."
-
 servers:
-  - url: https://graph.microsoft.com
+  - url: https://graph.microsoft.com/v1.0
     description: Microsoft Graph API
-
 paths:
   /users/{userPrincipalName}/appRoleAssignments:
     get:
@@ -68,14 +64,10 @@ paths:
         '404':
           description: User not found or no roles assigned.
       security:
-        - AADAuth: []
-
+        - bearerAuth: []
 components:
   securitySchemes:
-    AADAuth:
-      type: oauth2
-      flows:
-        clientCredentials:
-          tokenUrl: https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token
-          scopes:
-            https://graph.microsoft.com/.default: Access Microsoft Graph API
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
