@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: Graph API Plugin to Access Entra ID roles for a given user
+  description: Use this skill to retrieve a list of roles assigned to a user in Entra ID. For example, use this to find out which administrative or custom roles a specific user has within your organization.
+  version: "1.0"
+x-metadata:
+  name: ListAssignedEntraIDRoles
+  displayName: Retrieve list of Entra ID roles assigned to a given user
+  samplePrompts:
+    - "List all Entra ID roles assigned to harryb@MngEnvMCAP948099.onmicrosoft.com."
+    - "List all Entra ID roles assigned to Harry Burns"
+    - "What roles does harryb@MngEnvMCAP948099.onmicrosoft.com have in Entra ID?"
+    - "Retrieve all Entra ID roles for the user with the email harryb@MngEnvMCAP948099.onmicrosoft.com."
+    - "Show the roles assigned to harryb@MngEnvMCAP948099.onmicrosoft.com in Entra ID."
+servers:
+  - url: https://graph.microsoft.com/v1.0
+    description: Microsoft Graph API
+paths:
+  /users/{userPrincipalName}/appRoleAssignments:
+    get:
+      summary: Retrieve roles assigned to a user
+      description: Retrieve the roles assigned to a specific Entra ID user by their principal name.
+      parameters:
+        - name: userPrincipalName
+          in: path
+          required: true
+          description: The user principal name (email) of the target user.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of roles assigned to the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Role assignment ID.
+                        appRoleId:
+                          type: string
+                          description: The ID of the role.
+                        principalDisplayName:
+                          type: string
+                          description: The display name of the user.
+                        principalId:
+                          type: string
+                          description: The unique ID of the user.
+                        principalType:
+                          type: string
+                          description: The type of principal (e.g., User, Group).
+                        resourceDisplayName:
+                          type: string
+                          description: The name of the resource to which the role belongs.
+        '401':
+          description: Unauthorized. Authentication failed or access token is missing.
+        '403':
+          description: Forbidden. The authenticated user does not have permission to access this resource.
+        '404':
+          description: User not found or no roles assigned.
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
