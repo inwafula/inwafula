@@ -1,7 +1,7 @@
 Descriptor:   
   Name: ListPIMPermanentAssignments
-  DisplayName: Retrieve PIM Role Assignments with Permanent End Time    
-  Description: Use this skill to retrieve a list of PIM role assignments in Entra ID where the roles are assigned with an End Time of "Permanent."
+  DisplayName: Retrieve Entra ID PIM Role Assignments    
+  Description: Use this skill to retrieve a list of PIM (Priviledged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent"
   Authorization:   
     Type: AADDelegated   
     EntraScopes: https://graph.microsoft.com/.default 
