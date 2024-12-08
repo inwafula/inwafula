@@ -1,23 +1,23 @@
 openapi: 3.0.0
 info:
-  title: Graph API Plugin to Retrieve PIM Role Assignments
-  description: Use this skill to retrieve a list of PIM (Privildged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent"
+  title: Graph API Plugin to Retrieve Entra ID user PIM Role Assignments
+  description: Use this skill to retrieve a list of Entra ID users with PIM (Privildged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent"
   version: "1.0"
 x-metadata:
   name: ListPIMPermanentAssignments
-  displayName: Retrieve PIM (Privildged Identity Management) Role Assignments with Permanent End Time
+  displayName: Retrieve list of users with PIM (Privildged Identity Management) Role Assignments with Permanent End Time
   samplePrompts:
-    - "Give me all PIM role assignments with an end time of 'Permanent'."
-    - "List PIM roles with permanent assignments."
-    - "Retrieve all PIM role assignments where the role is permanently active."
+    - "Give me all users with PIM role assignments with an end time of 'Permanent'."
+    - "List users with PIM roles that have permanent assignments."
+    - "Retrieve all users with PIM role assignments where the role is permanently active."
 servers:
   - url: https://graph.microsoft.com/v1.0
     description: Microsoft Graph API
 paths:
   /roleManagement/directory/roleAssignments:
     get:
-      summary: Retrieve PIM role assignments with permanent end time
-      description: Retrieves PIM (Privildged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent"
+      summary: Retrieve Entra ID users with PIM role assignments set with a permanent end time
+      description: Retrieves users with PIM (Privildged Identity Management) role assignments in Entra ID where their roles are assigned with an End Time of "Permanent"
       parameters:
         - name: $filter
           in: query
