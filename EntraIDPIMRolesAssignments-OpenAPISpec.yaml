@@ -1,35 +1,34 @@
 openapi: 3.0.0
 info:
-  title: Graph API Plugin to Access Entra ID roles for a given user
-  description: Use this skill to retrieve a list of roles assigned to a user in Entra ID. For example, use this to find out which administrative or custom roles a specific user has within your organization.
+  title: Graph API Plugin to Retrieve PIM Role Assignments
+  description: Use this skill to retrieve a list of PIM (Privildged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent"
   version: "1.0"
 x-metadata:
-  name: ListAssignedEntraIDRoles
-  displayName: Retrieve list of Entra ID roles assigned to a given user
+  name: ListPIMPermanentAssignments
+  displayName: Retrieve PIM (Privildged Identity Management) Role Assignments with Permanent End Time
   samplePrompts:
-    - "List all Entra ID roles assigned to harryb@MngEnvMCAP948099.onmicrosoft.com."
-    - "List all Entra ID roles assigned to Harry Burns"
-    - "What roles does harryb@MngEnvMCAP948099.onmicrosoft.com have in Entra ID?"
-    - "Retrieve all Entra ID roles for the user with the email harryb@MngEnvMCAP948099.onmicrosoft.com."
-    - "Show the roles assigned to harryb@MngEnvMCAP948099.onmicrosoft.com in Entra ID."
+    - "Give me all PIM role assignments with an end time of 'Permanent'."
+    - "List PIM roles with permanent assignments."
+    - "Retrieve all PIM role assignments where the role is permanently active."
 servers:
   - url: https://graph.microsoft.com/v1.0
     description: Microsoft Graph API
 paths:
-  /users/{userPrincipalName}/appRoleAssignments:
+  /roleManagement/directory/roleAssignments:
     get:
-      summary: Retrieve roles assigned to a user
-      description: Retrieve the roles assigned to a specific Entra ID user by their principal name.
+      summary: Retrieve PIM role assignments with permanent end time
+      description: Retrieves PIM (Privildged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent"
       parameters:
-        - name: userPrincipalName
-          in: path
-          required: true
-          description: The user principal name (email) of the target user.
+        - name: $filter
+          in: query
+          required: false
+          description: OData filter to retrieve specific role assignments.
           schema:
             type: string
+            example: "assignmentState eq 'Active' and assignmentType eq 'Assigned'"
       responses:
         '200':
-          description: A list of roles assigned to the user.
+          description: A list of PIM role assignments with permanent end times.
           content:
             application/json:
               schema:
@@ -43,27 +42,36 @@ paths:
                         id:
                           type: string
                           description: Role assignment ID.
-                        appRoleId:
-                          type: string
-                          description: The ID of the role.
-                        principalDisplayName:
-                          type: string
-                          description: The display name of the user.
                         principalId:
                           type: string
-                          description: The unique ID of the user.
-                        principalType:
+                          description: The unique ID of the user or group assigned the role.
+                        principalDisplayName:
                           type: string
-                          description: The type of principal (e.g., User, Group).
+                          description: Display name of the principal (user or group).
+                        roleDefinitionId:
+                          type: string
+                          description: The ID of the role definition.
+                        assignmentType:
+                          type: string
+                          description: Indicates whether the assignment is permanent or eligible.
+                          example: "Assigned"
+                        assignmentState:
+                          type: string
+                          description: Indicates the state of the role assignment.
+                          example: "Active"
                         resourceDisplayName:
                           type: string
-                          description: The name of the resource to which the role belongs.
+                          description: Name of the resource associated with the assignment.
+                        endDateTime:
+                          type: string
+                          format: date-time
+                          description: The end time of the assignment, or "null" for permanent assignments.
         '401':
           description: Unauthorized. Authentication failed or access token is missing.
         '403':
           description: Forbidden. The authenticated user does not have permission to access this resource.
-        '404':
-          description: User not found or no roles assigned.
+        '500':
+          description: Internal server error.
       security:
         - bearerAuth: []
 components:
