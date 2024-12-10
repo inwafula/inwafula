@@ -1,23 +1,23 @@
 openapi: 3.0.0
 info:
-  title: Graph API Plugin to Retrieve Entra ID user PIM Role Assignments
-  description: Use this skill to retrieve a list of Entra ID users with PIM (Privileged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent"
+  title: Graph API Plugin to Retrieve Entra ID user PIM Role Assignments and Enterprise Applications
+  description: Use this skill to retrieve a list of Entra ID users with PIM (Privileged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent", along with associated Enterprise Applications.
   version: "1.0"
 x-metadata:
-  name: ListPIMPermanentAssignments
-  displayName: Retrieve list of users with PIM (Privileged Identity Management) Role Assignments with Permanent End Time
+  name: ListPIMPermanentAssignmentsAndApps
+  displayName: Retrieve list of users with PIM (Privileged Identity Management) Role Assignments with Permanent End Time and Enterprise Applications
   samplePrompts:
-    - "Give me all users with PIM role assignments with an end time of 'Permanent'."
-    - "List users with PIM roles that have permanent assignments."
-    - "Retrieve all users with PIM role assignments where the role is permanently active."
+    - "Give me all users with PIM role assignments with an end time of 'Permanent', along with their associated Enterprise Applications."
+    - "List users with PIM roles that have permanent assignments and associated applications."
+    - "Retrieve all users with PIM role assignments where the role is permanently active, including Enterprise Applications."
 servers:
   - url: https://graph.microsoft.com/v1.0
     description: Microsoft Graph API
 paths:
   /roleManagement/directory/roleAssignments:
     get:
-      summary: Retrieve Entra ID users with PIM role assignments set with a permanent end time
-      description: Retrieves users with PIM (Privileged Identity Management) role assignments in Entra ID where their roles are assigned with an End Time of "Permanent"
+      summary: Retrieve Entra ID users with PIM role assignments set with a permanent end time and associated Enterprise Applications
+      description: Retrieves users with PIM (Privileged Identity Management) role assignments in Entra ID where their roles are assigned with an End Time of "Permanent", along with associated Enterprise Applications.
       parameters:
         - name: $filter
           in: query
@@ -28,7 +28,7 @@ paths:
             example: "assignmentState eq 'Active' and assignmentType eq 'Assigned'"
       responses:
         '200':
-          description: A list of PIM role assignments with permanent end times.
+          description: A list of PIM role assignments with permanent end times and associated Enterprise Applications.
           content:
             application/json:
               schema:
@@ -63,6 +63,18 @@ paths:
                           type: string
                           format: date-time
                           description: The end time of the assignment, or "null" for permanent assignments.
+                        enterpriseApplications:
+                          type: array
+                          description: List of associated Enterprise Applications.
+                          items:
+                            type: object
+                            properties:
+                              appId:
+                                type: string
+                                description: Application ID of the Enterprise Application.
+                              displayName:
+                                type: string
+                                description: Display name of the Enterprise Application.
         '401':
           description: Unauthorized. Authentication failed or access token is missing.
         '403':
