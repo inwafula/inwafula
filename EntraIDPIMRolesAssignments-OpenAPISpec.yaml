@@ -1,11 +1,11 @@
 openapi: 3.0.0
 info:
   title: Graph API Plugin to Retrieve Entra ID user PIM Role Assignments
-  description: Use this skill to retrieve a list of Entra ID users with PIM (Privildged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent"
+  description: Use this skill to retrieve a list of Entra ID users with PIM (Privileged Identity Management) role assignments in Entra ID where the roles are assigned with an End Time of "Permanent"
   version: "1.0"
 x-metadata:
   name: ListPIMPermanentAssignments
-  displayName: Retrieve list of users with PIM (Privildged Identity Management) Role Assignments with Permanent End Time
+  displayName: Retrieve list of users with PIM (Privileged Identity Management) Role Assignments with Permanent End Time
   samplePrompts:
     - "Give me all users with PIM role assignments with an end time of 'Permanent'."
     - "List users with PIM roles that have permanent assignments."
@@ -17,7 +17,7 @@ paths:
   /roleManagement/directory/roleAssignments:
     get:
       summary: Retrieve Entra ID users with PIM role assignments set with a permanent end time
-      description: Retrieves users with PIM (Privildged Identity Management) role assignments in Entra ID where their roles are assigned with an End Time of "Permanent"
+      description: Retrieves users with PIM (Privileged Identity Management) role assignments in Entra ID where their roles are assigned with an End Time of "Permanent"
       parameters:
         - name: $filter
           in: query
@@ -42,15 +42,12 @@ paths:
                         id:
                           type: string
                           description: Role assignment ID.
-                        principalId:
-                          type: string
-                          description: The unique ID of the user or group assigned the role.
                         principalDisplayName:
                           type: string
-                          description: Display name of the principal (user or group).
-                        roleDefinitionId:
+                          description: Display name of the user or group assigned the role.
+                        roleDisplayName:
                           type: string
-                          description: The ID of the role definition.
+                          description: Display name of the role definition.
                         assignmentType:
                           type: string
                           description: Indicates whether the assignment is permanent or eligible.
